@@ -13,6 +13,7 @@
     "@types/node": "^16.18.126",
     "@types/react": "^19.1.15",
     "@types/react-dom": "^19.1.9",
+    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.12.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",

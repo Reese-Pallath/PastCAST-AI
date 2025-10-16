@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Header from './components/Header';
 import WeatherForm from './components/WeatherForm';
 import WeatherResults from './components/WeatherResults';
@@ -478,6 +479,7 @@ function App() {
 
       {/* AI Chatbot Widget - Always visible */}
       <ChatbotWidget />
+      <SpeedInsights />
     </div>
   );
 }
