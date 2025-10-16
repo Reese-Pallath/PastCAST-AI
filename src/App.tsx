@@ -17,23 +17,7 @@ function App() {
   const [showComparison, setShowComparison] = useState(false);
   const [activeTab, setActiveTab] = useState('weather');
   const [isLoading, setIsLoading] = useState(false);
-  const [isAppLoading, setIsAppLoading] = useState(true);
-  const [showWeatherHighlight, setShowWeatherHighlight] = useState(false);
-
-  // Fallback timeout to ensure app loads even if loading screen fails
-  useEffect(() => {
-    const fallbackTimer = setTimeout(() => {
-      if (isAppLoading) {
-        console.log('Fallback: Loading screen timeout, showing weather tab');
-        setIsAppLoading(false);
-        setActiveTab('weather');
-        setShowWeatherHighlight(true);
-        setTimeout(() => setShowWeatherHighlight(false), 2000);
-      }
-    }, 10000); // 10 second fallback
-
-    return () => clearTimeout(fallbackTimer);
-  }, [isAppLoading]);
+  const [showWeatherHighlight, setShowWeatherHighlight] = useState(true);
 
   // Scroll animation effect
   useEffect(() => {
@@ -59,22 +43,15 @@ function App() {
     };
   }, [activeTab]);
 
-  // Handle loading screen completion
-  const handleLoadingComplete = () => {
-    console.log('Loading completed, switching to weather tab');
-    setIsAppLoading(false);
-    // Automatically set to weather forecast tab after loading
-    setActiveTab('weather');
-    // Show highlight effect for the weather tab
-    setShowWeatherHighlight(true);
-    // Remove highlight after animation
-    setTimeout(() => setShowWeatherHighlight(false), 2000);
-  };
+  // Initial app setup
+  useEffect(() => {
+    // Set initial weather highlight
+    const timer = setTimeout(() => {
+      setShowWeatherHighlight(false);
+    }, 2000);
 
-  // Show loading screen initially
-  if (isAppLoading) {
-    return <LoadingScreen onComplete={handleLoadingComplete} />;
-  }
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleWeatherSubmit = async (location: LocationInput, startDate: string, endDate?: string, datasetMode?: 'IMD' | 'Global' | 'Combined') => {
     setIsLoading(true);
@@ -122,11 +99,11 @@ function App() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-        location,
-        date_range: {
-          start_date: startDate,
-          end_date: endDate
-        },
+            location,
+            date_range: {
+              start_date: startDate,
+              end_date: endDate
+            },
             dataset_mode: datasetMode
           })
         });
@@ -245,9 +222,6 @@ function App() {
     return maxRisk;
   };
 
-
-  console.log('App rendering, activeTab:', activeTab, 'isAppLoading:', isAppLoading);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
       {/* Professional Animated Background */}
@@ -283,7 +257,6 @@ function App() {
           ))}
         </div>
         
-        
         {/* Subtle Particle System */}
         <div className="absolute inset-0">
           {[...Array(8)].map((_, i) => (
@@ -308,25 +281,25 @@ function App() {
       <Header />
       
       <main className="container mx-auto px-4 py-8 relative z-10">
-                    {/* Professional Tab Navigation */}
+        {/* Professional Tab Navigation */}
         <div className="flex justify-center mb-8">
-                        <div className="bg-white/5 backdrop-blur-md rounded-2xl p-2 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300">
-                            <div className="flex space-x-1">
-            <button
-              onClick={() => setActiveTab('weather')}
-                                    className={`px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 relative overflow-hidden group button-interactive ${
-                activeTab === 'weather'
-                                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold shadow-lg shadow-blue-500/25 professional-pulse'
-                                            : 'text-white/80 hover:text-white hover:bg-white/10 hover:shadow-md hover:shadow-blue-500/20'
-                                    } ${showWeatherHighlight ? 'ring-4 ring-blue-400/50 ring-opacity-75 animate-pulse' : ''}`}
-                                >
-                                    <div className="flex items-center space-x-2 relative z-10">
-                                        <svg className="w-5 h-5 group-hover:rotate-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                                        </svg>
-                                        <span className="group-hover:tracking-wide transition-all duration-300">Weather Forecast</span>
-                                    </div>
-                                </button>
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl p-2 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300">
+            <div className="flex space-x-1">
+              <button
+                onClick={() => setActiveTab('weather')}
+                className={`px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 relative overflow-hidden group button-interactive ${
+                  activeTab === 'weather'
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold shadow-lg shadow-blue-500/25 professional-pulse'
+                    : 'text-white/80 hover:text-white hover:bg-white/10 hover:shadow-md hover:shadow-blue-500/20'
+                } ${showWeatherHighlight ? 'ring-4 ring-blue-400/50 ring-opacity-75 animate-pulse' : ''}`}
+              >
+                <div className="flex items-center space-x-2 relative z-10">
+                  <svg className="w-5 h-5 group-hover:rotate-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                  </svg>
+                  <span className="group-hover:tracking-wide transition-all duration-300">Weather Forecast</span>
+                </div>
+              </button>
               <button
                 onClick={() => setActiveTab('global')}
                 className={`px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 relative overflow-hidden group button-interactive ${
@@ -341,11 +314,11 @@ function App() {
                   </svg>
                   <span className="group-hover:tracking-wide transition-all duration-300">Global Weather</span>
                 </div>
-            </button>
-            <button
-              onClick={() => setActiveTab('comparison')}
+              </button>
+              <button
+                onClick={() => setActiveTab('comparison')}
                 className={`px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 relative overflow-hidden group button-interactive ${
-                activeTab === 'comparison'
+                  activeTab === 'comparison'
                     ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold shadow-lg shadow-blue-500/25 professional-pulse'
                     : 'text-white/80 hover:text-white hover:bg-white/10 hover:shadow-md hover:shadow-blue-500/20'
                 }`}
@@ -356,11 +329,11 @@ function App() {
                   </svg>
                   <span className="group-hover:tracking-wide transition-all duration-300">Compare Locations</span>
                 </div>
-            </button>
-            <button
-              onClick={() => setActiveTab('chat')}
+              </button>
+              <button
+                onClick={() => setActiveTab('chat')}
                 className={`px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 relative overflow-hidden group button-interactive ${
-                activeTab === 'chat'
+                  activeTab === 'chat'
                     ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold shadow-lg shadow-blue-500/25 professional-pulse'
                     : 'text-white/80 hover:text-white hover:bg-white/10 hover:shadow-md hover:shadow-blue-500/20'
                 }`}
@@ -371,62 +344,57 @@ function App() {
                   </svg>
                   <span className="group-hover:tracking-wide transition-all duration-300">AI Assistant</span>
                 </div>
-            </button>
+              </button>
             </div>
           </div>
         </div>
 
         {/* Tab Content */}
         {activeTab === 'weather' && (
-                        <div className="space-y-6">
-                            {/* Debug Message */}
-                            <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-green-400 text-sm">
-                                ✅ Weather Forecast Tab is Active - Loading screen completed successfully!
-                            </div>
-                            
-                            {/* Welcome Message */}
-                            {showWeatherHighlight && (
-                                <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-md rounded-2xl p-6 border border-blue-400/20 shadow-lg slide-in-left">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
-                                            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h3 className="text-white font-semibold text-lg">Welcome to PastCast Weather Forecast!</h3>
-                                            <p className="text-white/80 text-sm">Get historical weather probability data for any location and date range.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                            
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 scroll-animate">
-                                <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group slide-in-left">
-                                    <div className="relative z-10">
-              <WeatherForm onSubmit={handleWeatherSubmit} isLoading={isLoading} />
-            </div>
-                                </div>
-                                <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group slide-in-right">
-                                  <div className="relative z-10">
-              {weatherData ? (
-                <WeatherResults data={weatherData} />
-              ) : (
-                                    <div className="text-center text-white/70 py-12">
-                                      <div className="mb-4">
-                                        <svg className="w-16 h-16 mx-auto text-blue-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                                        </svg>
-                                      </div>
-                                      <p className="text-lg font-medium">Enter location and date to get weather forecast</p>
-                                      <p className="text-sm mt-2">Select a location on the map and choose your date range</p>
-                                    </div>
-                                  )}
-                                  </div>
-                                </div>
-                            </div>
+          <div className="space-y-6">
+            {/* Welcome Message */}
+            {showWeatherHighlight && (
+              <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-md rounded-2xl p-6 border border-blue-400/20 shadow-lg slide-in-left">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-white font-semibold text-lg">Welcome to PastCast Weather Forecast!</h3>
+                    <p className="text-white/80 text-sm">Get historical weather probability data for any location and date range.</p>
+                  </div>
                 </div>
-              )}
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 scroll-animate">
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group slide-in-left">
+                <div className="relative z-10">
+                  <WeatherForm onSubmit={handleWeatherSubmit} isLoading={isLoading} />
+                </div>
+              </div>
+              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group slide-in-right">
+                <div className="relative z-10">
+                  {weatherData ? (
+                    <WeatherResults data={weatherData} />
+                  ) : (
+                    <div className="text-center text-white/70 py-12">
+                      <div className="mb-4">
+                        <svg className="w-16 h-16 mx-auto text-blue-400/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                        </svg>
+                      </div>
+                      <p className="text-lg font-medium">Enter location and date to get weather forecast</p>
+                      <p className="text-sm mt-2">Select a location on the map and choose your date range</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {activeTab === 'global' && (
           <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group scroll-animate fade-in-up">
@@ -437,32 +405,32 @@ function App() {
         )}
 
         {activeTab === 'comparison' && (
-                  <div className="space-y-8 scroll-animate">
-                    <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group slide-in-left">
-                      <div className="relative z-10">
-            <ComparisonView onSubmit={handleComparisonSubmit} isLoading={isLoading} />
-                      </div>
-                    </div>
-                    
-                    {/* Loading Overlay */}
-                    {isLoading && (
-                      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-                        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl text-center">
-                          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                            <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                          </div>
-                          <h3 className="text-white text-xl font-semibold mb-2">Analyzing Weather Data</h3>
-                          <p className="text-white/70">Comparing locations and generating insights...</p>
-                          <div className="mt-4 w-64 bg-white/10 rounded-full h-2 mx-auto">
-                            <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {showComparison && comparisonData && (
-                      <div className="animate-in fade-in-50 duration-700">
-                        <ComparisonResults data={comparisonData} />
+          <div className="space-y-8 scroll-animate">
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group slide-in-left">
+              <div className="relative z-10">
+                <ComparisonView onSubmit={handleComparisonSubmit} isLoading={isLoading} />
+              </div>
+            </div>
+            
+            {/* Loading Overlay */}
+            {isLoading && (
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                    <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                  <h3 className="text-white text-xl font-semibold mb-2">Analyzing Weather Data</h3>
+                  <p className="text-white/70">Comparing locations and generating insights...</p>
+                  <div className="mt-4 w-64 bg-white/10 rounded-full h-2 mx-auto">
+                    <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {showComparison && comparisonData && (
+              <div className="animate-in fade-in-50 duration-700">
+                <ComparisonResults data={comparisonData} />
               </div>
             )}
           </div>
@@ -471,7 +439,7 @@ function App() {
         {activeTab === 'chat' && (
           <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden group scroll-animate fade-in-up">
             <div className="relative z-10">
-            <EnhancedAIChat />
+              <EnhancedAIChat />
             </div>
           </div>
         )}
