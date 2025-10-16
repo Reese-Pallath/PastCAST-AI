@@ -8,7 +8,7 @@ export const API_KEYS = {
   OPENWEATHERMAP: process.env.REACT_APP_OPENWEATHER_API_KEY || 'df47507122c11a81f8627207208463ac',
   
   // Gemini AI API Key
-  GEMINI: process.env.REACT_APP_GEMINI_API_KEY || 'YOUR_GEMINI_API_KEY_HERE',
+  GEMINI: process.env.REACT_APP_GEMINI_API_KEY || 'AIzaSyA2jvc1fPF0E-fSUHtrwrCPOWz57nNwCqA',
   
   // Weather API Key - Using OpenWeatherMap key as fallback
   WEATHERAPI: process.env.REACT_APP_WEATHER_API_KEY || 'df47507122c11a81f8627207208463ac',

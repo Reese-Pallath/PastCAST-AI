@@ -23,7 +23,7 @@ const EnhancedAIChat: React.FC<EnhancedAIChatProps> = ({
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: `Hello! I'm your AI weather assistant powered by Gemini AI, OpenWeatherMap, and WeatherAPI. I can help you with real-time weather data, forecasts, and climate insights for ${location}. What would you like to know?`,
+  text: `Hello! I'm your AI weather assistant powered by Gemini AI, OpenWeatherMap, and WeatherAPI. I can help you with real-time weather data, forecasts, and climate insights. What would you like to know?`,
       isUser: false,
       timestamp: new Date(),
       confidence: 1.0,

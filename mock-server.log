@@ -1,0 +1,9 @@
+Mock backend listening on http://localhost:8000
+[Chatbot] Processing query: "Will it rain tomorrow in Mumbai?"
+[Chatbot] Location: undefined
+[Chatbot] Processing query: "hi"
+[Chatbot] Location: undefined
+[Chatbot] Processing query: "vadodara"
+[Chatbot] Location: undefined
+[Chatbot] Processing query: "What will the temperature be tomorrow in vadodara"
+[Chatbot] Location: undefined

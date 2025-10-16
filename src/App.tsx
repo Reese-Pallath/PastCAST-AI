@@ -448,6 +448,9 @@ function App() {
       {/* AI Chatbot Widget - Always visible */}
       <ChatbotWidget />
       <SpeedInsights />
+      <footer className="w-full text-center py-6 text-gray-400 text-sm">
+        © 2025 PastCast. Created by Reese Jayaprakas Pallath.
+      </footer>
     </div>
   );
 }
