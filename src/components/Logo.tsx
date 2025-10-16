@@ -55,10 +55,20 @@ const Logo: React.FC<LogoProps> = ({
           <div className="relative w-6 h-6">
             {/* Sun */}
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-br from-yellow-300 to-orange-400 rounded-full animate-pulse"></div>
-            {/* Cloud */}
-            <div className="absolute top-1 left-0 w-5 h-3 bg-white/90 rounded-full"></div>
-            <div className="absolute top-1.5 left-1 w-3 h-2 bg-white/90 rounded-full"></div>
-            <div className="absolute top-1.5 left-2.5 w-3 h-2 bg-white/90 rounded-full"></div>
+            {/* Fluffier Cloud (SVG) */}
+            <svg className="absolute top-0 left-0 w-7 h-5" viewBox="0 0 64 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g fill="#ffffffcc">
+                <circle cx="20" cy="22" r="12" />
+                <circle cx="34" cy="18" r="14" />
+                <circle cx="46" cy="24" r="10" />
+                <ellipse cx="32" cy="30" rx="24" ry="10" />
+              </g>
+              <g fill="#ffffffde">
+                {/* small highlights for roundness */}
+                <circle cx="26" cy="16" r="3" fill="#ffffffaa" />
+                <circle cx="38" cy="20" r="2.5" fill="#ffffffaa" />
+              </g>
+            </svg>
             {/* Rain drops */}
             <div className="absolute top-3 left-1 w-0.5 h-1.5 bg-blue-400 animate-bounce" style={{ animationDelay: '0s' }}></div>
             <div className="absolute top-3 left-1.5 w-0.5 h-1.5 bg-blue-400 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
